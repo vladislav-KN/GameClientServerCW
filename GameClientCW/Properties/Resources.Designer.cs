@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace GameClientCW.Properties {
+namespace GameClient.Properties {
     using System;
     
     

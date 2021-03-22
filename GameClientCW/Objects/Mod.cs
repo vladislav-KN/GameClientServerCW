@@ -1,4 +1,5 @@
-﻿using System;
+﻿ 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,61 +9,30 @@ using System.Threading.Tasks;
 namespace GameClass.Objects 
 { 
     [Serializable]
-    public class Mod:GameObj
+    public class Mod  
     {
-        protected string name, discription;
-        protected List<Params> parametrs;
-        protected int id;
-
+     
         public string Name
         {
-            get
-            {
-                return name;
-            }
+            get; set;
         }
         public string Discription
         {
-            get
-            {
-                return discription;
-            }
+            get; set;
         }
         public int ID
         {
-            get
-            {
-                return id;
-            }
+            get; set;
         }
         public List<Params> Parametrs
         {
-            get
-            {
-                return parametrs;
-            }
+            get; set;
+        }
+        public override string ToString()
+        {
+            return Name;
         }
 
-        public void Update()
-        {
-            throw new System.NotImplementedException();
-        }
     }
-    public class AdminMopTools : Mod, Administriting
-    {
-        public void Add(GameObj gameObj)
-        {
-             
-        }
-
-        public void Change(GameObj gameObj)
-        {
-             
-        }
-
-        public void Delete(GameObj gameObj)
-        {
-             
-        }
-    }
+  
 }

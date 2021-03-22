@@ -1,4 +1,5 @@
-﻿using System;
+﻿ 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,16 +11,24 @@ namespace GameClass.Objects
     [Serializable]
     public class Params
     {
-        protected int ID;
-        protected ItemParamsName param;
-        protected string value;
-        public string ValueID
+ 
+        public int ID
         {
-            get
-            {
-                return value;
-            }
+            get; set;
         }
+        public ItemParamsName iParam
+        {
+            get; set;
+        }
+        public ModParamsName mParam
+        {
+            get; set;
+        }
+        public string value
+        {
+            get; set;
+        }
+
     }
     public enum ItemParamsName
     {
@@ -31,5 +40,11 @@ namespace GameClass.Objects
         PeriodicDamage,
         Period
     }
-
+    public enum ModParamsName
+    {
+        Time = 1,
+        NumberOfPaticipants,
+        NumberOfMaps
+         
+    }
 }

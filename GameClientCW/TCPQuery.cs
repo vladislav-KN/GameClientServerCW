@@ -10,9 +10,52 @@ using System.Windows;
 
 namespace GameClientCW
 {
+    public enum Ports
+    {
+
+        Register = 3000,
+        Login = 3001,
+
+        GetMap = 3010,
+        GetItem = 3011,
+        GetMod = 3012,
+        GetParams = 3013,
+        GetTasks = 3014,
+        GetPlayerInfo = 3015,
+        GetShop = 3016,
+
+        UpdateMap = 3020,
+        UpdateItem = 3021,
+        UpdateMod = 3022,
+        UpdateParams = 3023,
+        UpdateTasks = 3024,
+
+        AddMap = 3030,
+        AddItem = 3031,
+        AddMod = 3032,
+        AddParams = 3033,
+        AddTasks = 3034,
+
+        DeleteMap = 3040,
+        DeleteItem = 3041,
+        DeleteMod = 3042,
+        DeleteParams = 3043,
+        DeleteTasks = 3044,
+
+        DeleteMapMod = 3050,
+        DeleteModParam = 3051,
+        DeleteItemParam = 3052,
+        DeleteItemInventory = 3053,
+
+        UpdatePlayer = 3060,
+        UpdateMatch = 3061,
+        AddPlayerItem = 3062
+       
+    }
     public class TCPQuery<T>
     {
         private TcpClient tcpClient;
+        private List<int> UN_RECIV_DATA_PORT_LIST = new List<int>() { 3040, 3030 };
         private NetworkStream networkStream;
         public string IP { get; set; }
         public T objectTGS {get;set;}
@@ -25,42 +68,39 @@ namespace GameClientCW
         {
             tcpClient?.Close();
         }
-        public bool LogIn()
+        public bool send(int Port)
         {
-            int Port = 3040;
+ 
             tcpClient?.Close();
             tcpClient = new TcpClient();
             try
             {
                 tcpClient.Connect(IP, Port);
             }
-            catch (Exception e)
+            catch 
             {
-                MessageBox.Show(e.Message, "Ошибка подключения к серверу", MessageBoxButton.OK, MessageBoxImage.Information);
+                
                 return false;
             }
             bool compleat = false;
             networkStream = tcpClient.GetStream();
-
-            System.Threading.Tasks.Task.Factory.StartNew(() => 
+            try
             {
-                try
-                {
-                    var binF = new BinaryFormatter();
-                    binF.Serialize(networkStream, objectTGS);
-                    while (tcpClient.Connected)
-                    {
-                       var serverObj = binF.Deserialize(networkStream);
-                       objectTGS = (T)serverObj;
-                    }
-                    
-                }
-                catch
-                {
-                    MessageBox.Show("");
-                }
-                Disconect();
-            });
+                var binF = new BinaryFormatter();
+                binF.Serialize(networkStream, objectTGS);
+
+                var serverObj = binF.Deserialize(networkStream);
+                objectTGS = (T)serverObj; 
+
+                tcpClient?.Close();
+                return true;
+                
+            }
+            catch(Exception e)
+            {
+                MessageBox.Show(e.Message);
+            }
+           
             return compleat;
         }
     }

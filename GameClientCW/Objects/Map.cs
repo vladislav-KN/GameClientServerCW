@@ -1,4 +1,5 @@
-﻿using System;
+﻿ 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,44 +9,31 @@ using System.Threading.Tasks;
 namespace GameClass.Objects
 {
     [Serializable]
-    public class Map:GameObj
+    public class Map  
     {
-        protected string name, discription;
-        protected List<Mod> mods;
-        protected int id;
-
         public string Name
         {
-            get
-            {
-                return name;
-            }
+            get; set;
         }
         public string Discription
         {
-            get
-            {
-                return discription;
-            }
+            get; set;
         }
         public int ID
         {
-            get
-            {
-                return id;
-            }
+            get; set;
         }
         public List<Mod> Mods
         {
-            get
-            {
-                return mods;
-            }
+            get; set;
         }
-
-        public void Update()
+        public string ImageSource
         {
-            throw new System.NotImplementedException();
+            get;set;
+        }
+        public override string ToString()
+        {
+            return Name;
         }
     }
 }

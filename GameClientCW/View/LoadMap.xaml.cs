@@ -10,29 +10,35 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace GameClientCW
+namespace GameClientCW.View
 {
     /// <summary>
-    /// Interaction logic for ForgetPass.xaml
+    /// Interaction logic for LoadMap.xaml
     /// </summary>
-    public partial class ForgetPass : Window
+    public partial class LoadMap : UserControl
     {
-        public ForgetPass()
+        public LoadMap()
         {
             InitializeComponent();
         }
-
-        private void aufBtn_Click(object sender, RoutedEventArgs e)
+        public Button button
         {
-            DialogResult = true;
-            Close();
+            get
+            {
+                return ButtonFechar;
+            }
+            set
+            {
+                ButtonFechar = value;
+            }
         }
 
-        private void ForgotPass_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        private void ButtonFechar_Click(object sender, RoutedEventArgs e)
         {
-            DialogResult = true;
+
         }
     }
 }

@@ -6,13 +6,14 @@ using System.Text.RegularExpressions;
 
 namespace GameClass.Users
 {
+    [Serializable]
     public class Player:User
     {
         private int id;
         private string nickName;
         private string email;
         private int rate;
-        private DateTime inGameTime;
+        private TimeSpan inGameTime;
         private List<Item> items;
         private int coins;
         private double winRate;
@@ -23,6 +24,10 @@ namespace GameClass.Users
             get
             {
                 return id;
+            }
+            set
+            {
+                id = value;
             }
         }
         public string NickName
@@ -64,11 +69,15 @@ namespace GameClass.Users
                 rate = value;
             }
         }
-        public DateTime InGameTime
+        public TimeSpan InGameTime
         {
             get
             {
                 return inGameTime;
+            }
+            set
+            {
+                inGameTime = value;
             }
         }
         public List<Item> Items
@@ -115,12 +124,15 @@ namespace GameClass.Users
                 games = value;
             }
         }
- 
+        public int NumberOfMatch
+        {
+            get;set;
+        }
 
-        public Player(int Id, string log, string pass, string nick, string eml, int rte, DateTime IGT, List<Item> itms, int cn, double wr, List<Game> gms) : base(log,pass)
+        public Player(string log , string pass, string eml, int Id = default, string nick = default,  int rte = default, TimeSpan IGT = default, List<Item> itms = default, int cn = default, double wr = default, List<Game> gms = default, int numOfMatch = 0) : base(log,pass)
         {
             id = Id;
-            Email = eml;
+            email = eml;
             nickName = nick;
             rate = rte;
             inGameTime = IGT;
@@ -128,7 +140,7 @@ namespace GameClass.Users
             coins = cn;
             winRate = wr;
             games = gms;
-    
+            NumberOfMatch = numOfMatch;
         }
 
         public static bool IsValidEmail(string email)

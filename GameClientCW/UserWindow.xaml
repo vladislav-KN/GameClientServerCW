@@ -1,0 +1,106 @@
+﻿<Window x:Class="GameClientCW.UserWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:local="clr-namespace:GameClientCW"
+        mc:Ignorable="d" Height="600" Width="1024" MinWidth="1024" MinHeight="597" >
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="200"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0">
+            <Grid.Background>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="LightGray" Offset="1"/>
+                    <GradientStop Color="#FFE6E6E6"/>
+                </LinearGradientBrush>
+            </Grid.Background>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="100"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid.Effect>
+                <DropShadowEffect BlurRadius="20" Color="#FFDEDEDE" RenderingBias="Quality" ShadowDepth="1"/>
+            </Grid.Effect>
+
+            <Grid Background="#FFA46FE4">
+                <TextBlock x:Name="WinName" Text="ПРОФИЛЬ" HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="WS Simple Gallifreyan" Foreground="#FF4300B9" FontSize="16"/>
+            </Grid>
+
+            <StackPanel Grid.Row="1">
+                <Button x:Name="mapListBtn" Margin="10" Background="#FF673AB7" BorderBrush="#FF8522BD" Click="mapListBtn_Click">
+                    <Grid Width="150">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="7*"/>
+                            <RowDefinition Height="10*"/>
+                        </Grid.RowDefinitions>
+                        <materialDesign:PackIcon Kind="ViewDashboard" VerticalAlignment="Center" Margin="0,0,0,1" Grid.RowSpan="2"/>
+                        <TextBlock HorizontalAlignment="Center" Text="СПИСОК КАРТ" FontFamily="Champagne &amp; Limousines" Margin="28,0,27,0" Grid.RowSpan="2"/>
+                    </Grid>
+                </Button>
+
+                <Button x:Name="btnLoadProf" Margin="10" Background="#FF673AB7" BorderBrush="#FF8522BD" Click="btnLoadProf_Click" >
+                    <Grid Width="150">
+                        <materialDesign:PackIcon Kind="Account" VerticalAlignment="Center"/>
+                        <TextBlock x:Name="Profil" HorizontalAlignment="Center" Text="ПРОФИЛЬ" FontFamily="Champagne &amp; Limousines"/>
+                    </Grid>
+                </Button>
+
+                <Button x:Name="btnShop" Margin="10" Background="#FF673AB7" BorderBrush="#FF8522BD" Click="btnShop_Click">
+                    <Grid Width="150">
+                        <materialDesign:PackIcon Kind="Shop" VerticalAlignment="Center"/>
+                        <TextBlock HorizontalAlignment="Center" Text="МАГАЗИН" FontFamily="Champagne &amp; Limousines"/>
+                    </Grid>
+                </Button>
+
+                <Button Margin="10" Background="#FF673AB7" BorderBrush="#FF8522BD">
+                    <Grid Width="150">
+                        <materialDesign:PackIcon Kind="TshirtCrew" VerticalAlignment="Center"/>
+                        <TextBlock HorizontalAlignment="Center" Text="ИНВЕНТАРЬ" FontFamily="Champagne &amp; Limousines"/>
+                    </Grid>
+                </Button>
+
+                <Button Margin="10" Background="#FF673AB7" BorderBrush="#FF8522BD">
+                    <Grid Width="150">
+                        <materialDesign:PackIcon Kind="CalendarTask" VerticalAlignment="Center"/>
+                        <TextBlock HorizontalAlignment="Center" Text="ЗАДАНИЯ" FontFamily="Champagne &amp; Limousines"/>
+                    </Grid>
+                </Button>
+
+                <Button Margin="10" Background="#FF673AB7" BorderBrush="#FF8522BD">
+                    <Grid Width="150">
+                        <materialDesign:PackIcon Kind="ViewAgenda" VerticalAlignment="Center"/>
+                        <TextBlock HorizontalAlignment="Center" Text="РЕЖИМЫ" FontFamily="Champagne &amp; Limousines"/>
+                    </Grid>
+                </Button>
+                <Button Margin="10" Background="#FF673AB7" BorderBrush="#FF8522BD">
+                    <Grid Width="150">
+                        <materialDesign:PackIcon Kind="FileReport" VerticalAlignment="Center"/>
+                        <TextBlock HorizontalAlignment="Center" Text="ОТЧЁТЫ" FontFamily="Champagne &amp; Limousines"/>
+                    </Grid>
+                </Button>
+            </StackPanel>
+        </Grid>
+        <Grid Grid.Column="1">
+            <ScrollViewer x:Name="Content" Margin="0,0,0,0">
+                <Grid x:Name="TheGrid" MouseMove="TheGrid_MouseMove" >
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="3*"/>
+                        <ColumnDefinition Width="3*"/>
+                        <ColumnDefinition Width="3*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="1*"/>
+                    </Grid.RowDefinitions>
+                </Grid>
+
+            </ScrollViewer>
+        </Grid>
+    </Grid>
+</Window>

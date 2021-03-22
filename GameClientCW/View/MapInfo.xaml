@@ -1,0 +1,49 @@
+﻿<UserControl x:Class="GameClientCW.View.MapInfo"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:metr ="http://materialdesigninxaml.net/winfx/xaml/themes"
+      xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes" 
+      mc:Ignorable="d" 
+      d:DesignHeight="300" d:DesignWidth="281.333">
+
+    <Grid>
+        <Rectangle Margin="10,7,10,6" Fill="White" RadiusY="10" RadiusX="10" >
+
+            <Rectangle.Effect>
+                <DropShadowEffect BlurRadius="20" Color="#FFDEDEDE" RenderingBias="Quality" ShadowDepth="1"/>
+            </Rectangle.Effect>
+
+        </Rectangle>
+        <Grid Margin="15,15,15,90">
+            
+            <Border  CornerRadius="1"   Background="White" Margin="0,0,0,-76">
+                <Border.ContextMenu>
+                    <ContextMenu Name="cmMap" StaysOpen="true">
+                        <MenuItem x:Name="UpdateMap" Header="Обновить данные"/>
+                        <MenuItem x:Name="RemoveMap" Header="Удалить карту"/>
+                    </ContextMenu>
+                </Border.ContextMenu>
+                 
+                <StackPanel Margin="5,5,5,5">
+                    <Grid/>
+                        
+                    <Image x:Name="Map" Height="140"/>
+                    <TextBox x:Name="MapName" Text="Карта 1" Foreground="#FF7739E2" FontSize="15" FontWeight="Bold" Margin="5,0,5,0"/>
+                    <StackPanel  Margin="0,0"  Orientation="Vertical">
+                        <TextBox x:Name="MapDiscriptution"  VerticalAlignment="Center" Text="Some " Foreground="#FF7739E2" FontSize="12" Margin="5,0,5,0" TextWrapping="Wrap"/>
+                    </StackPanel>
+                    <ComboBox x:Name="MapMods" VerticalAlignment="Stretch" Margin="5,5,5,5">
+                        <ComboBox.ContextMenu >
+                            <ContextMenu Name="cm" StaysOpen="true">
+                                <MenuItem x:Name="AddMod" Header="Добавить"/>
+                                <MenuItem x:Name="RemoveMod" Header="Удалить"/>
+                            </ContextMenu>
+                        </ComboBox.ContextMenu>
+                    </ComboBox>
+                </StackPanel>
+            </Border>
+        </Grid>
+    </Grid>
+</UserControl>

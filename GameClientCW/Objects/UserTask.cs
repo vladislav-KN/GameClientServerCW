@@ -1,14 +1,17 @@
-﻿ 
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
 
 namespace GameClass.Objects
 {
     [Serializable]
-    public class Item  
+    public class UserTask  
     {
  
-        public string Name 
+        public string Name
         {
             get; set;
         }
@@ -16,18 +19,11 @@ namespace GameClass.Objects
         {
             get; set;
         }
-        public int ID {
-            get; set;
-        }
-        public int Number
+        public int ID
         {
             get; set;
         }
-        public int Cost
-        {
-            get; set;
-        }
-        public List<Params> Parametrs
+        public int Prize
         {
             get; set;
         }
@@ -35,6 +31,6 @@ namespace GameClass.Objects
         {
             return Name;
         }
+
     }
- 
 }

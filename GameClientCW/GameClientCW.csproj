@@ -62,6 +62,8 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -71,30 +73,28 @@
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
+    <Reference Include="UIAutomationProvider" />
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="WindowsFormsIntegration" />
+    <Reference Include="WpfAnimatedGif, Version=2.0.0.0, Culture=neutral, PublicKeyToken=9e7cd3b544a090dc, processorArchitecture=MSIL">
+      <HintPath>..\packages\WpfAnimatedGif.2.0.0\lib\net40\WpfAnimatedGif.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="CWGameDBDataSet.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>CWGameDBDataSet.xsd</DependentUpon>
+    <Compile Include="AddMapWindow.xaml.cs">
+      <DependentUpon>AddMapWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ForgetPass.xaml.cs">
-      <DependentUpon>ForgetPass.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Objects\Administriting.cs" />
-    <Compile Include="Objects\GameObj.cs" />
     <Compile Include="Objects\Item.cs" />
     <Compile Include="Objects\Map.cs" />
     <Compile Include="Objects\Mod.cs" />
     <Compile Include="Objects\Params.cs" />
-    <Compile Include="Objects\Task.cs" />
+    <Compile Include="Objects\UserTask.cs" />
     <Compile Include="Registration.xaml.cs">
       <DependentUpon>Registration.xaml</DependentUpon>
     </Compile>
@@ -102,7 +102,37 @@
     <Compile Include="Users\Game.cs" />
     <Compile Include="Users\Player.cs" />
     <Compile Include="Users\User.cs" />
-    <Page Include="ForgetPass.xaml">
+    <Compile Include="UserWindow.xaml.cs">
+      <DependentUpon>UserWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\AddModToMapWindow.xaml.cs">
+      <DependentUpon>AddModToMapWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\ItemInfo.xaml.cs">
+      <DependentUpon>ItemInfo.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\ItemView.xaml.cs">
+      <DependentUpon>ItemView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\shopItem.xaml.cs">
+      <DependentUpon>shopItem.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\LoadMap.xaml.cs">
+      <DependentUpon>LoadMap.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\MapInfo.xaml.cs">
+      <DependentUpon>MapInfo.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\MapViewer.xaml.cs">
+      <DependentUpon>MapViewer.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Match.xaml.cs">
+      <DependentUpon>Match.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\ProfStats.xaml.cs">
+      <DependentUpon>ProfStats.xaml</DependentUpon>
+    </Compile>
+    <Page Include="AddMapWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -119,6 +149,46 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="Registration.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\AddModToMapWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\ItemInfo.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\ItemView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\shopItem.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\LoadMap.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\MapInfo.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\MapViewer.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Match.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\ProfStats.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -141,17 +211,6 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <None Include="CWGameDBDataSet.xsc">
-      <DependentUpon>CWGameDBDataSet.xsd</DependentUpon>
-    </None>
-    <None Include="CWGameDBDataSet.xsd">
-      <Generator>MSDataSetGenerator</Generator>
-      <LastGenOutput>CWGameDBDataSet.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="CWGameDBDataSet.xss">
-      <DependentUpon>CWGameDBDataSet.xsd</DependentUpon>
-    </None>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -162,7 +221,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Recourses\" />
+    <Resource Include="View\load.gif" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.7.2">
@@ -175,6 +234,30 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Recourses\load.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Recourses\map1.jpg" />
+    <Resource Include="Recourses\map2.png" />
+    <Resource Include="Recourses\map3.png" />
+    <Resource Include="View\map4.png" />
+    <Resource Include="View\map5.png" />
+    <Resource Include="View\map6.png" />
+    <Resource Include="View\map7.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="View\map1.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="View\map2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="View\map3.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="load.gif" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\MaterialDesignThemes.4.0.0\build\MaterialDesignThemes.targets" Condition="Exists('..\packages\MaterialDesignThemes.4.0.0\build\MaterialDesignThemes.targets')" />
