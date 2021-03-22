@@ -6,6 +6,7 @@ using System.Text.RegularExpressions;
 
 namespace GameClass.Users
 {
+    [Serializable]
     public class Player:User
     {
         private int id;
@@ -117,10 +118,10 @@ namespace GameClass.Users
         }
  
 
-        public Player(int Id, string log, string pass, string nick, string eml, int rte, DateTime IGT, List<Item> itms, int cn, double wr, List<Game> gms) : base(log,pass)
+        public Player(string log , string pass, string eml, int Id = default, string nick = default,  int rte = default, DateTime IGT = default, List<Item> itms = default, int cn = default, double wr = default, List<Game> gms = default) : base(log,pass)
         {
             id = Id;
-            Email = eml;
+            email = eml;
             nickName = nick;
             rate = rte;
             inGameTime = IGT;

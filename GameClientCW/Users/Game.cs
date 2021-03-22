@@ -4,6 +4,7 @@ using System.Collections.Generic;
 
 namespace GameClass.Users
 {
+    [Serializable]
     public class Game
     {
         private List<Player> playerList;
@@ -18,7 +19,7 @@ namespace GameClass.Users
             List<Player> matchData = new List<Player>();
             foreach (Player pl in playerList)
             {
-                matchData.Add(new Player(pl.ID, "", "", pl.NickName, "", pl.Rate, pl.InGameTime, pl.Items, winer.Rate, pl.WinRate, pl.Games));
+                matchData.Add(new Player( "", "",  "", pl.ID, pl.NickName, pl.Rate, pl.InGameTime, pl.Items, winer.Rate, pl.WinRate, pl.Games));
             }return matchData;
         }
 
@@ -37,7 +38,7 @@ namespace GameClass.Users
         {
             get
             {
-                return new Player(winer.ID, "", "", winer.NickName, "", winer.Rate, winer.InGameTime, winer.Items, winer.Rate, winer.WinRate, winer.Games);
+                return new Player( "", "", "", winer.ID, winer.NickName,  winer.Rate, winer.InGameTime, winer.Items, winer.Rate, winer.WinRate, winer.Games);
             }
             set
             {

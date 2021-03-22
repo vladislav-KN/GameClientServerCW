@@ -2,6 +2,7 @@
 using System.Data.SqlClient;
 using System.IO;
 using System.Windows;
+using System.Windows.Media;
 using GameClass.Users;
 
 namespace GameClientCW
@@ -11,7 +12,7 @@ namespace GameClientCW
     /// </summary>
     public partial class MainWindow : Window
     {
-        
+        TCPQuery<User> Login;
         public MainWindow()
         {
             InitializeComponent();
@@ -33,51 +34,107 @@ namespace GameClientCW
             bool? res = registration.ShowDialog();
             if(res == true)
             {
-                Show();
-            }
-            
-            
-
-        }
-
-        private void forgotPass_Click(object sender, RoutedEventArgs e)
-        {
-            ForgetPass forgetPass = new ForgetPass();
-            Hide();
-            bool? res = forgetPass.ShowDialog();
-            if (res == true)
-            {
-                Show();
-            }
-        }
-
-        private void btnEnter_Click(object sender, RoutedEventArgs e)
-        {
-            string path = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + "\\hosts";
-            FileInfo fi1 = new FileInfo(path);
-
-            if (!fi1.Exists)
-            {
-                //Create a file to write to.
-                using (StreamWriter sw = fi1.CreateText())
+                if (string.IsNullOrEmpty(registration.tCPQuery.objectTGS.NickName))
                 {
-                    sw.WriteLine("127.0.0.1");
+                    Show();
                 }
+                else
+                {
+                    
+                }
+            }
+            
+            
+
+        }
+ 
+        private void RegFin(User user)
+        {
+            switch (user.Login.Length)
+            {
+                case 0:
+                    Error.Text = "Введён не правильный пароль";
+                    formDE(true);
+                    break;
+                case 1:
+                    Error.Text = "Аккаунта с таким логином не существует";
+                    formDE(true);
+                    break;
+                case 2:
+                    Error.Text = "Не удалось подключится к серверу, повторите попытку позднее";
+                    formDE(true);
+                    break;
+                default:
+                    
+                    Close();
+                    break;
+
+            }
+        }
+        private void formDE(bool isTF)
+        {
+            if (isTF)
+            {
+                load.Visibility = Visibility.Hidden;
             }
             else
             {
-                using (StreamReader sr = fi1.OpenText())
-                {
-                    string s = "";
-                    while ((s = sr.ReadLine()) != null)
-                    {
-                        hosts.Add(s);
-                    }
-                }
+                load.Visibility = Visibility.Visible;
             }
-            TCPQuery<User> tCPQuery = new TCPQuery<User>("127.0.0.1",new User("",""));
-            tCPQuery.LogIn(); 
-            
+            login.IsEnabled = isTF;
+            password.IsEnabled = isTF;
+        }
+        private void btnEnter_Click(object sender, RoutedEventArgs e)
+        {
+
+            string Lgin = login.Text.Trim();
+            string pass1 = password.Password.Trim();
+            Error.Text = string.Empty;
+            bool mistake = false;
+            if (Lgin.Length < 4)
+            {
+                login.ToolTip = "Логин может содержать как минимум 4 символа, логин может содержать только цифры и буквы\nПример: name123";
+                login.Foreground = Brushes.DarkRed;
+                mistake = true;
+            }
+            else
+            {
+                login.ToolTip = "Пример: name123";
+                login.Foreground = Brushes.Black;
+            }
+            if (pass1.Length < 4)
+            {
+                password.ToolTip = "Пароль должен состоять как минимум из 4-х символов\n Пример: @1sfe3$;svfe";
+                password.Foreground = Brushes.DarkRed;
+                mistake = true;
+            }
+            else
+            {
+                password.ToolTip = "Пример: @1sfe3$;svfe";
+                password.Foreground = Brushes.Black;
+            }
+            if (!mistake)
+            {
+                Login = new TCPQuery<User>("127.0.0.1", new User(login.Text, password.Password));
+                formDE(false);
+                System.Threading.Tasks.Task.Factory.StartNew(() =>
+                {
+                    bool normalExt = Login.send(3040);
+                    this.Dispatcher.Invoke(() => {
+                        if (normalExt)
+                        {
+                            RegFin(Login.objectTGS);
+                        }
+                        else
+                        {
+                            Error.Text = "Не удалось подключится к серверу, повторите попытку позднее";
+                            formDE(true);
+                        }
+                    });
+
+                });
+            }
+
         }
     }
 }

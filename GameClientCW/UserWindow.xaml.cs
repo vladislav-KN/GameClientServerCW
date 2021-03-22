@@ -15,24 +15,13 @@ using System.Windows.Shapes;
 namespace GameClientCW
 {
     /// <summary>
-    /// Interaction logic for ForgetPass.xaml
+    /// Interaction logic for UserWindow.xaml
     /// </summary>
-    public partial class ForgetPass : Window
+    public partial class UserWindow : Window
     {
-        public ForgetPass()
+        public UserWindow()
         {
             InitializeComponent();
-        }
-
-        private void aufBtn_Click(object sender, RoutedEventArgs e)
-        {
-            DialogResult = true;
-            Close();
-        }
-
-        private void ForgotPass_Closing(object sender, System.ComponentModel.CancelEventArgs e)
-        {
-            DialogResult = true;
         }
     }
 }

@@ -13,6 +13,7 @@ namespace GameClientCW
     public class TCPQuery<T>
     {
         private TcpClient tcpClient;
+        private List<int> RECIV_DATA_PORT_LIST = new List<int>() { 3040, 3030 };
         private NetworkStream networkStream;
         public string IP { get; set; }
         public T objectTGS {get;set;}
@@ -25,42 +26,40 @@ namespace GameClientCW
         {
             tcpClient?.Close();
         }
-        public bool LogIn()
+        public bool send(int Port)
         {
-            int Port = 3040;
+ 
             tcpClient?.Close();
             tcpClient = new TcpClient();
             try
             {
                 tcpClient.Connect(IP, Port);
             }
-            catch (Exception e)
+            catch 
             {
-                MessageBox.Show(e.Message, "Ошибка подключения к серверу", MessageBoxButton.OK, MessageBoxImage.Information);
+                
                 return false;
             }
             bool compleat = false;
             networkStream = tcpClient.GetStream();
-
-            System.Threading.Tasks.Task.Factory.StartNew(() => 
+            try
             {
-                try
+                var binF = new BinaryFormatter();
+                binF.Serialize(networkStream, objectTGS);
+                if (RECIV_DATA_PORT_LIST.Contains(Port))
                 {
-                    var binF = new BinaryFormatter();
-                    binF.Serialize(networkStream, objectTGS);
-                    while (tcpClient.Connected)
-                    {
-                       var serverObj = binF.Deserialize(networkStream);
-                       objectTGS = (T)serverObj;
-                    }
-                    
+                    var serverObj = binF.Deserialize(networkStream);
+                    objectTGS = (T)serverObj; 
                 }
-                catch
-                {
-                    MessageBox.Show("");
-                }
-                Disconect();
-            });
+                tcpClient?.Close();
+                return true;
+                
+            }
+            catch(Exception e)
+            {
+                MessageBox.Show(e.Message);
+            }
+           
             return compleat;
         }
     }

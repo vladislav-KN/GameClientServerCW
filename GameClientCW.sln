@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.30907.101
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameClientCW", "GameClientCW\GameClientCW.csproj", "{ABE30A2C-6F8B-4D45-B0F3-07F53F0177E1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServerClient", "ServerClient\ServerClient.csproj", "{F16F8980-A63C-4173-B539-E2F8EFBAEF37}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ServerClient", "ServerClient\ServerClient.csproj", "{F16F8980-A63C-4173-B539-E2F8EFBAEF37}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -19,8 +19,8 @@ Global
 		{ABE30A2C-6F8B-4D45-B0F3-07F53F0177E1}.Release|Any CPU.Build.0 = Debug|Any CPU
 		{F16F8980-A63C-4173-B539-E2F8EFBAEF37}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{F16F8980-A63C-4173-B539-E2F8EFBAEF37}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F16F8980-A63C-4173-B539-E2F8EFBAEF37}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F16F8980-A63C-4173-B539-E2F8EFBAEF37}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F16F8980-A63C-4173-B539-E2F8EFBAEF37}.Release|Any CPU.ActiveCfg = Debug|Any CPU
+		{F16F8980-A63C-4173-B539-E2F8EFBAEF37}.Release|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
