@@ -40,5 +40,14 @@ namespace GameClientCW.View
         {
 
         }
+        /// Interaction logic for UserWindow.xaml
+        /// </summary>
+        public partial class UserWindow : Window
+        {
+            public UserWindow()
+            {
+                InitializeComponent();
+            }
+        }
     }
 }
