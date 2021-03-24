@@ -22,7 +22,7 @@ namespace GameClientCW
 {
     public interface IMainWindowsCodeBehind
     {
-        /// <summary>
+    /// <summary>
         /// Показ сообщения для пользователя
         /// </summary>
         /// <param name="message">текст сообщения</param>
@@ -57,7 +57,7 @@ namespace GameClientCW
             get; set;
         }
         public Player player
-        {
+    {
             get;set;
         }
         public UserWindow(User usr)
@@ -338,10 +338,10 @@ namespace GameClientCW
                         }
                     });
                     if (shopItems.Count==0 )
-                    {
+            {
                         bool normalExt = query.send((int)Ports.GetShop);
                         shopItems = query.objectTGS;
-                    }
+            }
                     this.Dispatcher.Invoke(() =>
                     {
                         
@@ -349,7 +349,7 @@ namespace GameClientCW
                         foreach (Item itm in shopItems)
                         {
                             if (every3 == 3)
-                            {
+            {
                                 RowDefinition gridRow1 = new RowDefinition();
                                 gridRow1.Height = GridLength.Auto;
                                 TheGrid.RowDefinitions.Add(gridRow1);
@@ -363,7 +363,7 @@ namespace GameClientCW
                             Grid.SetColumn(uc, every3);
                             Grid.SetRow(uc, TheGrid.RowDefinitions.Count - 1);
                             every3++;
-                        }
+            }
                     });
                 
             });
@@ -380,7 +380,7 @@ namespace GameClientCW
             System.Threading.Tasks.Task.Factory.StartNew(() =>
             {
                 bool compleat = tCPQuery.send((int)Ports.AddPlayerItem);
-               
+
                 this.Dispatcher.Invoke(() =>
                 {
                     if (compleat)
@@ -418,7 +418,7 @@ namespace GameClientCW
                 selectedChlMap = (MapInfo)selectedChild;
             }
             else if(child == typeof(ShopItem))
-            {
+        {
                 selectedChlItm = (ShopItem)selectedChild;
             }
         }
@@ -430,7 +430,7 @@ namespace GameClientCW
         }
  
         private void btnLoadProf_Click(object sender, RoutedEventArgs e)
-        {
+    {
             WinName.Text = "ПРОФИЛЬ";
             ProfileLoad();
         }
@@ -440,5 +440,6 @@ namespace GameClientCW
             WinName.Text = "МАГАЗИН";
             ShopLoad() ;
         }
+>>>>>>> 98e14fdcfe07d388da674ca2abf481bef917fea8:GameClientCW/UserWindow.xaml.cs
     }
 }
