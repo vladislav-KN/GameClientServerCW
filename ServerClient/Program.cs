@@ -19,6 +19,11 @@ using MailKit;
 using MimeKit;
 using GameClass.Objects;
 using GameClientCW;
+using OfficeOpenXml;
+using System.Reflection;
+ 
+ 
+
 
 namespace ServerClient
 {
@@ -203,6 +208,35 @@ namespace ServerClient
                                 return;
                             }
                             break;
+                        case (int)Ports.GetTasks:
+                            var tasks = binf.Deserialize(stream) as List<UserTask>;
+                            using (var con = new SqlConnection())
+                            {
+                                con.ConnectionString = connectionString;
+                                con.Open();
+                                string strSQL = "select* from Tasks;";
+                                var cmd = new SqlCommand(strSQL, con);
+
+                                using (var dr = cmd.ExecuteReader())
+                                {
+                                    while (dr.Read())
+                                    {
+                                        UserTask task = new UserTask();
+                                        task.ID = int.Parse(dr["TaskID"].ToString());
+                                        task.Discription = dr["Discription"].ToString();
+                                        task.Name = dr["Name"].ToString();
+                                        task.Prize = int.Parse(dr["Prize"].ToString());
+                                        tasks.Add(task);
+                                    }
+
+                                }
+
+                                 
+                                binf.Serialize(stream, tasks);
+
+                                return;
+                            }
+                            break;
                         case (int)Ports.GetMod:
                             var Mods = binf.Deserialize(stream) as List<Mod>;
                             using (var con = new SqlConnection())
@@ -223,6 +257,25 @@ namespace ServerClient
                                         Mods.Add(mod);
                                     }
 
+                                }
+                                foreach (Mod mod in Mods)
+                                {
+                                    mod.Parametrs = new List<Params>();
+                                    strSQL = "select * from Mod_param as con join Params on con.[ParamID] = Params.[ParamsID] where con.[ModID] = @mapID";
+                                    cmd = new SqlCommand(strSQL, con);
+                                    cmd.Parameters.AddWithValue("@mapID", mod.ID);
+                                    using (var dr = cmd.ExecuteReader())
+                                    {
+                                        while (dr.Read())
+                                        {
+                                            Params param = new Params();
+                                            param.ID = int.Parse(dr["ParamsID"].ToString());
+                                            param.mParam = (ModParamsName)int.Parse(dr["Value"].ToString());
+                                            param.value = dr["Params"].ToString();
+                                            mod.Parametrs.Add(param);
+                                        }
+
+                                    }
                                 }
                                 binf.Serialize(stream, Mods);
 
@@ -277,8 +330,7 @@ namespace ServerClient
                                         strSQL = "SELECT * From Items Where ItemID = @id";
                                         cmd = new SqlCommand(strSQL, con);
                                         cmd.Parameters.AddWithValue("@id", it.ID);
-                                       
-                                        userPlayer.Items = new List<Item>();
+                                        
                                         using (var dr = cmd.ExecuteReader())
                                         {
                                             while (dr.Read())
@@ -331,7 +383,7 @@ namespace ServerClient
                                         cmd = new SqlCommand(strSQL, con);
                                         cmd.Parameters.AddWithValue("@id", gm.GameId);
                                   
-                                        userPlayer.Items = new List<Item>();
+                                       
                                         using (var dr = cmd.ExecuteReader())
                                         {
                                             while (dr.Read())
@@ -374,6 +426,53 @@ namespace ServerClient
                         case (int)Ports.GetShop:
                             var sendShop = binf.Deserialize(stream) as List<Item>;
                             
+                            binf.Serialize(stream, shop);
+                            break;
+                        case (int)Ports.GetItem:
+                            var items = binf.Deserialize(stream) as List<Item>;
+                            using (var con = new SqlConnection())
+                            {
+                                con.ConnectionString = connectionString;
+                                con.Open();
+                                string strSQL = "select * from Items;";
+                                var cmd = new SqlCommand(strSQL, con);
+
+                                using (var dr = cmd.ExecuteReader())
+                                {
+                                    while (dr.Read())
+                                    {
+                                        Item item = new Item();
+                                        item.ID = int.Parse(dr["ItemID"].ToString());
+                                        item.Cost = int.Parse(dr["Value"].ToString());
+                                        item.Discription = dr["Description"].ToString();
+                                        item.Name = dr["Name"].ToString();
+                                        items.Add(item);
+                                    }
+
+                                }
+                                foreach (Item itm in items)
+                                {
+                                    itm.Parametrs = new List<Params>();
+                                    strSQL = "select * from item_param as con join Params on con.[ParamID] = Params.[ParamsID] where con.[ItemID] = @mapID"; 
+                                    cmd = new SqlCommand(strSQL, con);
+                                    cmd.Parameters.AddWithValue("@mapID", itm.ID);
+                                    using (var dr = cmd.ExecuteReader())
+                                    {
+                                        while (dr.Read())
+                                        {
+                                            Params param = new Params();
+                                            param.ID = int.Parse(dr["ParamsID"].ToString());
+                                            param.iParam = (ItemParamsName)int.Parse(dr["Value"].ToString());
+                                            param.value = dr["Params"].ToString();
+                                            itm.Parametrs.Add(param);
+                                        }
+
+                                    }
+                                }
+                                binf.Serialize(stream, items);
+
+                                return;
+                            }
                             binf.Serialize(stream, shop);
                             break;
 
@@ -422,7 +521,167 @@ namespace ServerClient
                             }
                             binf.Serialize(stream, map);
                             break;
+                        case (int)Ports.UpdateMod:
+                            var mod = binf.Deserialize(stream) as Mod;
 
+                            try
+                            {
+                                using (var con = new SqlConnection())
+                                {
+                                    con.ConnectionString = connectionString;
+                                    con.Open();
+                                    string strSQL = @"UPDATE Mods SET Discription = @disc, [Name] = @name WHERE [ModID] = @id;";
+                                    var cmd = new SqlCommand(strSQL, con);
+
+                                    cmd.Parameters.AddWithValue("@name", mod.Name);
+                                    cmd.Parameters.AddWithValue("@disc", mod.Discription);
+                                    cmd.Parameters.AddWithValue("@id", mod.ID);
+                                    cmd.ExecuteNonQuery();
+                                    if (mod.Parametrs.Count > 0)
+                                    {
+                                        strSQL = @"DELETE FROM Mod_param WHERE [ModID] = @id;";
+                                        cmd = new SqlCommand(strSQL, con);
+                                        cmd.Parameters.AddWithValue("@id", mod.ID);
+                                        cmd.ExecuteNonQuery();
+                                        foreach (Params md in mod.Parametrs)
+                                        {
+                                            if (md.ID != -1) 
+                                            {
+                                                strSQL = @" UPDATE Params SET [Value] = @param, [Params] = @value MERGE WHERE [ParamsID] = @prid;";
+                                                cmd = new SqlCommand(strSQL, con);
+                                                cmd.Parameters.AddWithValue("@prid", md.ID);
+                                            }
+                                            else
+                                            {
+                                                strSQL = @" INSERT INTO  Params([Value], [Params]) VALUES (@param, @value) SELECT @@IDENTITY AS [@@IDENTITY];";
+                                                cmd = new SqlCommand(strSQL, con);
+
+                                            }
+        
+                                            cmd.Parameters.AddWithValue("@param", md.mParam);
+                                            cmd.Parameters.AddWithValue("@value", md.value); 
+                                            if (md.ID != -1)
+                                                cmd.ExecuteNonQuery();
+                                            else
+                                            {
+                                                using (var dr = cmd.ExecuteReader())
+                                                {
+                                                    while (dr.Read())
+                                                    {
+                                                        md.ID = int.Parse(dr[0].ToString());
+                                                    }
+                                                }
+                                            }
+                                            strSQL = @"INSERT INTO  Mod_param([ModID], [ParamID]) VALUES (@idMod, @idParam);";
+                                            cmd = new SqlCommand(strSQL, con);
+                                            cmd.Parameters.AddWithValue("@idMod", mod.ID);
+                                            cmd.Parameters.AddWithValue("@idParam", md.ID);
+                                            cmd.ExecuteNonQuery();
+
+                                        }
+                                    }
+                                }
+                            }
+                            catch
+                            {
+                                mod.ID = -1;
+                            }
+                            binf.Serialize(stream, mod);
+                            break;
+                        case (int)Ports.UpdateItem:
+                            var item = binf.Deserialize(stream) as Item;
+
+                            try
+                            {
+                                using (var con = new SqlConnection())
+                                {
+                                    con.ConnectionString = connectionString;
+                                    con.Open();
+                                    string strSQL = @"UPDATE Items SET [Description] = @disc, [Name] = @name, [Value] = @val WHERE [ItemID] = @id;";
+                                    var cmd = new SqlCommand(strSQL, con);
+
+                                    cmd.Parameters.AddWithValue("@name", item.Name);
+                                    cmd.Parameters.AddWithValue("@disc", item.Discription);
+                                    cmd.Parameters.AddWithValue("@id", item.ID);
+                                    cmd.Parameters.AddWithValue("@val", item.Cost);
+                                    cmd.ExecuteNonQuery();
+                                    if (item.Parametrs.Count > 0)
+                                    {
+                                        strSQL = @"DELETE FROM item_param WHERE [ItemID] = @id;";
+                                        cmd = new SqlCommand(strSQL, con);
+                                        cmd.Parameters.AddWithValue("@id", item.ID);
+                                        cmd.ExecuteNonQuery();
+                                        foreach (Params md in item.Parametrs)
+                                        {
+                                            if (md.ID != -1)
+                                            {
+                                                strSQL = @" UPDATE Params SET [Value] = @param, [Params] = @value WHERE [ParamsID] = @prid;";
+                                                cmd = new SqlCommand(strSQL, con);
+                                                cmd.Parameters.AddWithValue("@prid", md.ID);
+                                            }
+                                            else
+                                            {
+                                                strSQL = @" INSERT INTO  Params([Value], [Params]) VALUES (@param, @value) SELECT @@IDENTITY AS [@@IDENTITY];";
+                                                cmd = new SqlCommand(strSQL, con);
+
+                                            }
+
+                                            cmd.Parameters.AddWithValue("@param", (int)md.iParam);
+                                            cmd.Parameters.AddWithValue("@value", md.value);
+                                            if (md.ID != -1)
+                                                cmd.ExecuteNonQuery();
+                                            else
+                                            {
+                                                using (var dr = cmd.ExecuteReader())
+                                                {
+                                                    while (dr.Read())
+                                                    {
+                                                        md.ID = int.Parse(dr[0].ToString());
+                                                    }
+                                                }
+                                            }
+                                            strSQL = @"INSERT INTO  item_param([ItemID], [ParamID]) VALUES (@idItem, @idParam);";
+                                            cmd = new SqlCommand(strSQL, con);
+                                            cmd.Parameters.AddWithValue("@idItem", item.ID);
+                                            cmd.Parameters.AddWithValue("@idParam", md.ID);
+                                            cmd.ExecuteNonQuery();
+
+                                        }
+                                    }
+                                }
+                            }
+                            catch
+                            {
+                                item.ID = -1;
+                            }
+                            binf.Serialize(stream, item);
+                            break;
+                        case (int)Ports.UpdateTasks:
+                            var task = binf.Deserialize(stream) as UserTask;
+
+                            try
+                            {
+                                using (var con = new SqlConnection())
+                                {
+                                    con.ConnectionString = connectionString;
+                                    con.Open();
+                                    string strSQL = @"UPDATE Tasks SET Discription = @disc, [Prize] = @img, [Name] = @name WHERE [TaskID] = @id;";
+                                    var cmd = new SqlCommand(strSQL, con);
+
+                                    cmd.Parameters.AddWithValue("@name", task.Name);
+                                    cmd.Parameters.AddWithValue("@disc", task.Discription);
+                                    cmd.Parameters.AddWithValue("@img", task.Prize);
+                                    cmd.Parameters.AddWithValue("@id", task.ID);
+                                    cmd.ExecuteNonQuery();
+                                     
+                                }
+                            }
+                            catch
+                            {
+                                task.ID = -1;
+                            }
+                            binf.Serialize(stream, task);
+                            break;
                     }
                     break;
                 case 303:
@@ -460,13 +719,109 @@ namespace ServerClient
                             }
                             binf.Serialize(stream, Map);
                             break;
+                        case (int)Ports.AddItem:
+                            var item = binf.Deserialize(stream) as Item;
+                            try
+                            {
+                                using (var con = new SqlConnection())
+                                {
+                                    con.ConnectionString = connectionString;
+                                    con.Open();
+                                    string strSQL = @" INSERT INTO Items([Name], [Description], [Value]) values(@name, @disc,@val) SELECT @@IDENTITY AS[@@IDENTITY];";
+                                    var cmd = new SqlCommand(strSQL, con);
+
+                                    cmd.Parameters.AddWithValue("@name", item.Name);
+                                    cmd.Parameters.AddWithValue("@disc", item.Discription);
+                                    cmd.Parameters.AddWithValue("@val", item.Cost);
+                                    int index = 0;
+                                    using (var dr = cmd.ExecuteReader())
+                                    {
+                                        while (dr.Read())
+                                        {
+                                            index = int.Parse(dr[0].ToString());
+                                        }
+                                    }
+                                    item.ID = index;
+                                }
+                            }
+                            catch
+                            {
+                                item.ID = -1;
+
+                            }
+                            binf.Serialize(stream, item);
+                            break;
+                        case (int)Ports.AddMod:
+                            var mod = binf.Deserialize(stream) as Mod;
+                            try
+                            {
+                                using (var con = new SqlConnection())
+                                {
+                                    con.ConnectionString = connectionString;
+                                    con.Open();
+                                    string strSQL = @" INSERT INTO Mods([Name], [Discription]) values(@name, @disc) SELECT @@IDENTITY AS[@@IDENTITY];";
+                                    var cmd = new SqlCommand(strSQL, con);
+
+                                    cmd.Parameters.AddWithValue("@name", mod.Name);
+                                    cmd.Parameters.AddWithValue("@disc", mod.Discription);
+ 
+                                    int index = 0;
+                                    using (var dr = cmd.ExecuteReader())
+                                    {
+                                        while (dr.Read())
+                                        {
+                                            index = int.Parse(dr[0].ToString());
+                                        }
+                                    }
+                                    mod.ID = index;
+                                }
+                            }
+                            catch
+                            {
+                                mod.ID = -1;
+
+                            }
+                            binf.Serialize(stream, mod);
+                            break;
+                        case (int)Ports.AddTasks:
+                            var task = binf.Deserialize(stream) as UserTask;
+                            try
+                            {
+                                using (var con = new SqlConnection())
+                                {
+                                    con.ConnectionString = connectionString;
+                                    con.Open();
+                                    string strSQL = @" INSERT INTO Tasks([Name], [Discription], [Prize]) values(@name, @disc,@piz) SELECT @@IDENTITY AS[@@IDENTITY];";
+                                    var cmd = new SqlCommand(strSQL, con);
+
+                                    cmd.Parameters.AddWithValue("@name", task.Name);
+                                    cmd.Parameters.AddWithValue("@disc", task.Discription);
+                                    cmd.Parameters.AddWithValue("@piz", task.Prize);
+                                    int index = 0;
+                                    using (var dr = cmd.ExecuteReader())
+                                    {
+                                        while (dr.Read())
+                                        {
+                                            index = int.Parse(dr[0].ToString());
+                                        }
+                                    }
+                                    task.ID = index;
+                                }
+                            }
+                            catch
+                            {
+                                task.ID = -1;
+
+                            }
+                            binf.Serialize(stream, task);
+                            break;
                     }
                     break;
                 case 304:
                     switch (portNumber)
                     {
                         case (int)Ports.DeleteMap:
-                            var Map = binf.Deserialize(stream) as Map;
+                            var Map = (int)binf.Deserialize(stream);
                             try
                             {
                                 using (var con = new SqlConnection())
@@ -475,17 +830,83 @@ namespace ServerClient
                                     con.Open();
                                     string strSQL = @" DELETE FROM Map WHERE MapID = @ID";
                                     var cmd = new SqlCommand(strSQL, con);
-                                    cmd.Parameters.AddWithValue("@ID", Map.ID);
+                                    cmd.Parameters.AddWithValue("@ID", Map);
                                     cmd.ExecuteNonQuery();
-                                    Map.ID = 0;
+                                    Map = 0;
                                 }
                             }
                             catch
                             {
-                                Map.ID = -1;
+                                Map = -1;
 
                             }
                             binf.Serialize(stream, Map);
+                            break;
+                        case (int)Ports.DeleteItem:
+                            var item = (int)binf.Deserialize(stream);
+                            try
+                            {
+                                using (var con = new SqlConnection())
+                                {
+                                    con.ConnectionString = connectionString;
+                                    con.Open();
+                                    string strSQL = @" DELETE FROM Items WHERE ItemID = @ID";
+                                    var cmd = new SqlCommand(strSQL, con);
+                                    cmd.Parameters.AddWithValue("@ID", item);
+                                    cmd.ExecuteNonQuery();
+                                    item = 0;
+                                }
+                            }
+                            catch
+                            {
+                                item = -1;
+
+                            }
+                            binf.Serialize(stream, item);
+                            break;
+                        case (int)Ports.DeleteMod:
+                            var mod = (int)binf.Deserialize(stream);
+                            try
+                            {
+                                using (var con = new SqlConnection())
+                                {
+                                    con.ConnectionString = connectionString;
+                                    con.Open();
+                                    string strSQL = @" DELETE FROM Mods WHERE ModID = @ID";
+                                    var cmd = new SqlCommand(strSQL, con);
+                                    cmd.Parameters.AddWithValue("@ID", mod);
+                                    cmd.ExecuteNonQuery();
+                                    mod = 0;
+                                }
+                            }
+                            catch
+                            {
+                               mod = -1;
+
+                            }
+                            binf.Serialize(stream, mod);
+                            break;
+                        case (int)Ports.DeleteTasks:
+                            var task = (int)binf.Deserialize(stream);
+                            try
+                            {
+                                using (var con = new SqlConnection())
+                                {
+                                    con.ConnectionString = connectionString;
+                                    con.Open();
+                                    string strSQL = @"DELETE FROM Tasks WHERE TaskID = @ID";
+                                    var cmd = new SqlCommand(strSQL, con);
+                                    cmd.Parameters.AddWithValue("@ID", task);
+                                    cmd.ExecuteNonQuery();
+                                    task = 0;
+                                }
+                            }
+                            catch
+                            {
+                                task = -1;
+
+                            }
+                            binf.Serialize(stream, task);
                             break;
                     }
                     break;
@@ -518,6 +939,58 @@ namespace ServerClient
                             }
                             binf.Serialize(stream, MapMod);
                             break;
+                        case (int)Ports.DeleteItemParam:
+
+                            var itemParam = binf.Deserialize(stream) as List<int>;
+                            try
+                            {
+                                using (var con = new SqlConnection())
+                                {
+                                    con.ConnectionString = connectionString;
+                                    con.Open();
+                                    string strSQL = @"DELETE FROM item_param  WHERE ParamID = @pid AND ItemID = @iid";
+                                    var cmd = new SqlCommand(strSQL, con);
+                                    cmd.Parameters.AddWithValue("@iid", itemParam[0]);
+                                    cmd.Parameters.AddWithValue("@pid", itemParam[1]);
+                                    cmd.ExecuteNonQuery();
+                                    itemParam[0] = 0;
+                                    itemParam[1] = 0;
+                                }
+                            }
+                            catch
+                            {
+                                itemParam[0] = -1;
+                                itemParam[1] = -2;
+
+                            }
+                            binf.Serialize(stream, itemParam);
+                            break;
+                        case (int)Ports.DeleteModParam:
+
+                            var modParam = binf.Deserialize(stream) as List<int>;
+                            try
+                            {
+                                using (var con = new SqlConnection())
+                                {
+                                    con.ConnectionString = connectionString;
+                                    con.Open();
+                                    string strSQL = @" DELETE FROM Mod_param  WHERE ParamID = @pid AND ModID = @iid";
+                                    var cmd = new SqlCommand(strSQL, con);
+                                    cmd.Parameters.AddWithValue("@iid", modParam[0]);
+                                    cmd.Parameters.AddWithValue("@pid", modParam[1]);
+                                    cmd.ExecuteNonQuery();
+                                    modParam[0] = 0;
+                                    modParam[1] = 0;
+                                }
+                            }
+                            catch
+                            {
+                                modParam[0] = -1;
+                                modParam[1] = -2;
+
+                            }
+                            binf.Serialize(stream, modParam);
+                            break;
                     }
                     break;
                 case 306:
@@ -545,14 +1018,13 @@ namespace ServerClient
                                     }
                                     strSQL = "SELECT [Value] From Items Where [ItemID] = @iid ";
                                     cmd = new SqlCommand(strSQL, con);
-                                    
                                     cmd.Parameters.AddWithValue("@iid", addToInvent[1]);
                                     int cost = 0;
                                     using (var dr = cmd.ExecuteReader())
                                     {
                                         while (dr.Read())
                                         {
-                                            money = int.Parse(dr[0].ToString());
+                                            cost = int.Parse(dr[0].ToString());
                                         }
                                     }
                                     if ((money - cost)<0)
@@ -563,6 +1035,7 @@ namespace ServerClient
                                         return;
                                     }
                                     strSQL = "UPDATE Player SET [Money] -=@cost";
+                                    cmd = new SqlCommand(strSQL, con);
                                     cmd.Parameters.AddWithValue("@cost", cost);
                                     cmd.ExecuteNonQuery();
                                     strSQL = @"MERGE user_item AS uiT 
@@ -574,10 +1047,27 @@ WHEN MATCHED THEN
    UPDATE SET uiT.Number +=1
 WHEN NOT MATCHED BY TARGET THEN
    INSERT ([ItemID], [Number], [UserID])
-   VALUES (1, 1, 2008); ";
+   VALUES (@itmID, 1, @usrID); ";
                                      cmd = new SqlCommand(strSQL, con);
                                     cmd.Parameters.AddWithValue("@itmID", addToInvent[1]);
                                     cmd.Parameters.AddWithValue("@usrID ", addToInvent[0]);
+                                    cmd.ExecuteNonQuery();
+                                    strSQL = "INSERT INTO purchase([Date],[Sum]) VALUES(@date, @sum) SELECT @@IDENTITY AS [@@IDENTITY];";
+                                    cmd = new SqlCommand(strSQL, con);
+                                    cmd.Parameters.AddWithValue("@date", DateTime.Now);
+                                    cmd.Parameters.AddWithValue("@sum", cost);
+                                    int ind = 0;
+                                    using (var dr = cmd.ExecuteReader())
+                                    {
+                                        while (dr.Read())
+                                        {
+                                            ind = int.Parse(dr[0].ToString());
+                                        }
+                                    }
+                                    strSQL = "INSERT INTO user_purchase([PurchaseID],[userID]) VALUES(@pind, @uind);"; 
+                                    cmd = new SqlCommand(strSQL, con);
+                                    cmd.Parameters.AddWithValue("@pind", ind);
+                                    cmd.Parameters.AddWithValue("@uind", addToInvent[0]);
                                     cmd.ExecuteNonQuery();
                                     addToInvent[0] = 0;
                                     addToInvent[1] = 1;
@@ -590,6 +1080,185 @@ WHEN NOT MATCHED BY TARGET THEN
 
                             }
                             binf.Serialize(stream, addToInvent);
+                            break;
+                        case (int)Ports.RemovePlayerItem:
+
+                            var removePlayerItem = binf.Deserialize(stream) as List<int>;
+                            try
+                            {
+                                using (var con = new SqlConnection())
+                                {
+                                    con.ConnectionString = connectionString;
+                                    con.Open();
+                                    string strSQL = "SELECT [Number] From user_item Where [UserID] = @uid and [ItemID] = @iid";
+                                    var cmd = new SqlCommand(strSQL, con);
+                                    cmd.Parameters.AddWithValue("@uid", removePlayerItem[0]);
+                                    cmd.Parameters.AddWithValue("@iid", removePlayerItem[1]);
+                                    int num = 0;
+                                    using (var dr = cmd.ExecuteReader())
+                                    {
+                                        while (dr.Read())
+                                        {
+                                            num = int.Parse(dr[0].ToString());
+                                        }
+                                    }
+
+                                    if ((num - 1) > 0)
+                                    {
+                                        strSQL = "UPDATE user_item SET [Number] -=1 Where [UserID] = @uid and [ItemID] = @iid";
+                                         
+                                        removePlayerItem[1] = 1;
+                                    }
+                                    else if (num - 1 == 0)
+                                    {
+                                        strSQL = "DELETE FROM user_item Where [UserID] = @uid and [ItemID] = @iid";
+                                       
+                                        removePlayerItem[1] = 0;
+                                    }
+                                    else
+                                    {
+                                        removePlayerItem[0] = 0;
+                                        removePlayerItem[1] = 2;
+                                        binf.Serialize(stream, removePlayerItem);
+                                        return;
+                                    }
+                                    cmd = new SqlCommand(strSQL, con);
+                                    cmd.Parameters.AddWithValue("@uid", removePlayerItem[0]);
+                                    cmd.Parameters.AddWithValue("@iid", removePlayerItem[1]);
+                                    cmd.ExecuteNonQuery();
+                                }
+                            }
+                            catch
+                            {
+                                removePlayerItem[0] = -1;
+                                removePlayerItem[1] = -1;
+
+                            }
+                            binf.Serialize(stream, removePlayerItem);
+                            break;
+                        case (int)Ports.UserTaskCopleat:
+                            var userTaskCompl = binf.Deserialize(stream) as List<int>;
+                            try
+                            {
+                                using (var con = new SqlConnection())
+                                {
+                                    con.ConnectionString = connectionString;
+                                    con.Open();
+                                    string strSQL = "SELECT [Prize] From Tasks Where [TaskID] = @tid";
+                                    var cmd = new SqlCommand(strSQL, con);
+                                    cmd.Parameters.AddWithValue("@tid", userTaskCompl[0]);
+                                    
+                                    int num = 0;
+                                    using (var dr = cmd.ExecuteReader())
+                                    {
+                                        while (dr.Read())
+                                        {
+                                            num = int.Parse(dr[0].ToString());
+                                        }
+                                    }
+                                    strSQL = "UPDATE Player SET [Money] += @mon Where [UserID] = @uid";
+                                    cmd = new SqlCommand(strSQL, con);
+                                    cmd.Parameters.AddWithValue("@uid", userTaskCompl[1]);
+                                    cmd.Parameters.AddWithValue("@iid", num);
+                                    cmd.ExecuteNonQuery();
+                                    userTaskCompl[0] = 0;
+                                    userTaskCompl[1] = 0;
+                                }
+                            }
+                            catch
+                            {
+                                userTaskCompl[0] = -1;
+                                userTaskCompl[1] = -1;
+
+                            }
+                            binf.Serialize(stream, userTaskCompl);
+                            break;
+                    }
+                    break;
+                case 307:
+                    switch (portNumber)
+                    {
+                        case  (int)Ports.ReportsToFromUsers:
+                            try {
+                                ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+                                
+                                using (var con = new SqlConnection())
+                                {
+                                    
+                                    con.ConnectionString = connectionString;
+                                    con.Open();
+                                    string strSQL = @"SELECT * FROM Player LEFT JOIN user_purchase as UP on UP.userID = Player.UserID JOIN purchase as pur on UP.PurchaseID = pur.PurchaseID
+Right Join user_item as ui on Player.UserID = ui.UserID
+Right Join Items as itm on itm.ItemID = ui.ItemID
+WHERE YEAR(pur.[Date]) <= YEAR(SYSDATETIME()); ";
+                                    var cmd = new SqlCommand(strSQL, con);
+                                    using (var dr = cmd.ExecuteReader())
+                                    {
+                                         
+                                        FileInfo path = new FileInfo("rep"+DateTime.Now.ToString().Replace(" ","_").Replace(":", "_").Replace(".", "_") + ".xlsx");
+                                        if (path.Exists)
+                                        {
+                                            path.Delete();
+
+                                        }
+                                        ExcelPackage np = new ExcelPackage(path);
+                                        np.Workbook.Properties.Author = "DataBase";
+                                        np.Workbook.Properties.Title = "Отчет";
+                                        np.Workbook.Properties.Subject = "Отчет";
+                                        ExcelWorksheet worksheet = np.Workbook.Worksheets.Add("Отчет");
+                                        int numField = dr.FieldCount;
+                                        for (int k = 0; k < numField; k++)
+                                        {
+                                            worksheet.Cells[1, k + 1].Value = Convert.ToString(dr.GetName(k));
+                                        }
+                                        int integer = 0;
+                                        double floatnum = 0.0;
+                                        int i = 0;
+                                        while (dr.Read())
+                                        {
+                                            for (int j = 0; j < numField; j++)
+                                            {
+                                                if (int.TryParse(Convert.ToString(dr[j]), out integer))
+                                                {
+                                                    worksheet.Cells[i + 2, j + 1].Value = integer;
+                                                    worksheet.Cells[i + 2, j + 1].Style.Numberformat.Format = "0";
+                                                }
+                                                else if (double.TryParse(Convert.ToString(dr[j]), out floatnum))
+                                                {
+                                                    worksheet.Cells[i + 2, j + 1].Value = floatnum;
+                                                    worksheet.Cells[i + 2, j + 1].Style.Numberformat.Format = "#,###0.00";
+                                                }
+                                                else
+                                                {
+                                                    worksheet.Cells[i + 2, j + 1].Value = Convert.ToString(dr[j]);
+                                                }
+
+                                            }
+                                            i++;
+                                        }
+                                        np.Save();
+                                        StreamWriter sWriter = new StreamWriter(stream);
+
+                                        byte[] bytes = File.ReadAllBytes(path.Name);
+                                            
+                                        sWriter.WriteLine(bytes.Length.ToString());
+                                        sWriter.Flush();
+
+                                        sWriter.WriteLine(path.Name);
+                                        sWriter.Flush();
+
+                                        Console.WriteLine("Sending file");
+                                        client.Client.SendFile(path.Name);
+                                        path.Delete();
+
+
+                                    } 
+                                }
+                            }
+                            catch(Exception e)
+                            {
+                                Console.WriteLine(e.Message);
+                            }
                             break;
                     }
                     break;

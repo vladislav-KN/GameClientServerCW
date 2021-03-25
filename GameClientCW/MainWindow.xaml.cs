@@ -13,6 +13,8 @@ namespace GameClientCW
     public partial class MainWindow : Window
     {
         TCPQuery<User> Login;
+        public Player pl { get; set; }
+        public User usr { get; set; }
         public MainWindow()
         {
             InitializeComponent();
@@ -34,15 +36,18 @@ namespace GameClientCW
             bool? res = registration.ShowDialog();
             if(res == true)
             {
-                if (string.IsNullOrEmpty(registration.tCPQuery.objectTGS.NickName))
+                if (registration.tCPQuery is null)
+                {
+                    Show();
+                }
+                else if(string.IsNullOrEmpty(registration.tCPQuery.objectTGS.NickName))
                 {
                     Show();
                 }
                 else
                 {
-                    UserWindow ur = new UserWindow(registration.tCPQuery.objectTGS);
-                    ur.ShowDialog();
-                    Show();
+                    pl = registration.tCPQuery.objectTGS;
+                    Close();
                 }
             }
             
@@ -68,10 +73,8 @@ namespace GameClientCW
                     formDE(true);
                     break;
                 default:
-                    UserWindow ur = new UserWindow(user);
-                    Hide();
-                    ur.ShowDialog();
-                    Show();
+                    usr = user;
+                    Close();
                     break;
 
             }
@@ -140,6 +143,14 @@ namespace GameClientCW
                 });
             }
 
+        }
+
+        private void AuthMain_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            if(usr is null && pl is null)
+            {
+                DialogResult = true;
+            }
         }
     }
 }

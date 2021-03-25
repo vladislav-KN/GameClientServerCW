@@ -37,23 +37,23 @@ namespace GameClientCW.View
                 itm = value;
                 ItemCost.Text = itm.Cost + " $";
                 ItemDiscriptution.Text = itm.Discription;
-                ItemName.Text = itm.Name;
+                ItemName.Text = itm.Name + " x" + itm.Number;
                 foreach (Params pr in itm.Parametrs)
                 {
                     ItemParams.Text += pr.iParam.ToString() + "\t" + pr.value + "\n";
                 }
             }
         }
-        public Button buy
+        public Button use
         {
             get
             {
 
-                return btnBuy;
+                return btnUse;
             }
             set
             {
-                btnBuy = value;
+                btnUse = value;
             }
         }
     }

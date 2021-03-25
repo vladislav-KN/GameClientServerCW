@@ -17,16 +17,16 @@ using System.Windows.Shapes;
 namespace GameClientCW.View
 {
     /// <summary>
-    /// Interaction logic for ItemInfo.xaml
+    /// Interaction logic for TaskInfo.xaml
     /// </summary>
-    public partial class ItemInfo : UserControl
+    public partial class TaskInfo : UserControl
     {
-        public ItemInfo()
+        public TaskInfo()
         {
             InitializeComponent();
         }
-        Item itm;
-        public Item Item
+        UserTask itm;
+        public UserTask Item
         {
             get
             {
@@ -35,13 +35,10 @@ namespace GameClientCW.View
             set
             {
                 itm = value;
-                ItemCost.Text = itm.Cost.ToString() ;
+                Prize.Text = itm.Prize.ToString();
                 ItemDiscriptution.Text = itm.Discription;
                 ItemName.Text = itm.Name;
-                foreach (Params pr in itm.Parametrs)
-                {
-                    combo.Items.Add(pr);
-                }
+
             }
         }
         public string itemName
@@ -66,40 +63,19 @@ namespace GameClientCW.View
                 ItemName.Text = value;
             }
         }
-        public string itemVal
+         public string val
         {
-            get
+            get 
             {
-                return ItemDiscriptution.Text;
+                return Prize.Text; 
             }
             set
             {
-                ItemName.Text = value;
+                Prize.Text = value;
             }
         }
-        public ComboBox combo
-        {
-            get
-            {
-                return MapMods;
-            }
-            set
-            {
-                MapMods = value;
-            }
-        }
+        
  
-        public MenuItem itemAdd
-        {
-            get
-            {
-                return AddParam;
-            }
-            set
-            {
-                AddParam = value;
-            }
-        }
         public MenuItem itemRemove
         {
             get
@@ -122,30 +98,20 @@ namespace GameClientCW.View
                 UpdateItem = value;
             }
         }
-        public MenuItem Delete
-        {
-            get
-            {
-                return RemoveParam;
-            }
-            set
-            {
-                RemoveParam = value;
-            }
-        }
+         
 
         private void ItemCost_TextChanged(object sender, TextChangedEventArgs e)
         {
             int val;
-            if(!int.TryParse(ItemCost.Text,out val))
+            if (!int.TryParse(Prize.Text, out val))
             {
-                ItemCost.ToolTip = "Можно вводить только цифры";
-                ItemCost.Foreground = Brushes.DarkRed;
+                Prize.ToolTip = "Можно вводить только цифры";
+                Prize.Foreground = Brushes.DarkRed;
             }
             else
             {
-                ItemCost.ToolTip = "Можно вводить только цифры";
-                ItemCost.Foreground = Brushes.Black;
+                Prize.ToolTip = "Можно вводить только цифры";
+                Prize.Foreground = Brushes.Black;
 
             }
         }

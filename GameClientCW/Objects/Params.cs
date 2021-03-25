@@ -28,7 +28,17 @@ namespace GameClass.Objects
         {
             get; set;
         }
-
+        public override string ToString()
+        {
+            if (mParam != 0)
+            {
+                return mParam.ToString() + "\t" + value + "\n";
+            }
+            else
+            {
+                return iParam.ToString() + "\t" + value + "\n";
+            }
+        }
     }
     public enum ItemParamsName
     {

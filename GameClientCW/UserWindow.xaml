@@ -12,7 +12,6 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="30"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <Grid Grid.Row="0">
@@ -60,30 +59,30 @@
                     </Grid>
                 </Button>
 
-                <Button Margin="10" Background="#FF673AB7" BorderBrush="#FF8522BD">
+                <Button x:Name="btnInvent" Margin="10" Background="#FF673AB7" BorderBrush="#FF8522BD" Click="btnInvent_Click">
                     <Grid Width="150">
                         <materialDesign:PackIcon Kind="TshirtCrew" VerticalAlignment="Center"/>
                         <TextBlock HorizontalAlignment="Center" Text="ИНВЕНТАРЬ" FontFamily="Champagne &amp; Limousines"/>
                     </Grid>
                 </Button>
 
-                <Button Margin="10" Background="#FF673AB7" BorderBrush="#FF8522BD">
+                <Button x:Name="btnTask" Margin="10" Background="#FF673AB7" BorderBrush="#FF8522BD" Click="btnTask_Click">
                     <Grid Width="150">
                         <materialDesign:PackIcon Kind="CalendarTask" VerticalAlignment="Center"/>
                         <TextBlock HorizontalAlignment="Center" Text="ЗАДАНИЯ" FontFamily="Champagne &amp; Limousines"/>
                     </Grid>
                 </Button>
 
-                <Button Margin="10" Background="#FF673AB7" BorderBrush="#FF8522BD">
+                <Button Margin="10" Background="#FF673AB7" BorderBrush="#FF8522BD" Click="Button_Click">
                     <Grid Width="150">
                         <materialDesign:PackIcon Kind="ViewAgenda" VerticalAlignment="Center"/>
                         <TextBlock HorizontalAlignment="Center" Text="РЕЖИМЫ" FontFamily="Champagne &amp; Limousines"/>
                     </Grid>
                 </Button>
-                <Button Margin="10" Background="#FF673AB7" BorderBrush="#FF8522BD">
+                <Button x:Name="btnReps" Margin="10" Background="#FF673AB7" BorderBrush="#FF8522BD" Click="Button_Click_1">
                     <Grid Width="150">
                         <materialDesign:PackIcon Kind="FileReport" VerticalAlignment="Center"/>
-                        <TextBlock HorizontalAlignment="Center" Text="ОТЧЁТЫ" FontFamily="Champagne &amp; Limousines"/>
+                        <TextBlock x:Name="btnRep" HorizontalAlignment="Right" Text="ОТЧЁТ" FontFamily="Champagne &amp; Limousines" Margin="0,0,54,0"/>
                     </Grid>
                 </Button>
             </StackPanel>

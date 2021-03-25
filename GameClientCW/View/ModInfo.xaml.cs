@@ -17,16 +17,16 @@ using System.Windows.Shapes;
 namespace GameClientCW.View
 {
     /// <summary>
-    /// Interaction logic for ItemInfo.xaml
+    /// Interaction logic for ModInfo.xaml
     /// </summary>
-    public partial class ItemInfo : UserControl
+    public partial class ModInfo : UserControl
     {
-        public ItemInfo()
+        public ModInfo()
         {
             InitializeComponent();
         }
-        Item itm;
-        public Item Item
+        Mod itm;
+        public Mod Item
         {
             get
             {
@@ -35,7 +35,6 @@ namespace GameClientCW.View
             set
             {
                 itm = value;
-                ItemCost.Text = itm.Cost.ToString() ;
                 ItemDiscriptution.Text = itm.Discription;
                 ItemName.Text = itm.Name;
                 foreach (Params pr in itm.Parametrs)
@@ -88,7 +87,7 @@ namespace GameClientCW.View
                 MapMods = value;
             }
         }
- 
+
         public MenuItem itemAdd
         {
             get
@@ -134,20 +133,6 @@ namespace GameClientCW.View
             }
         }
 
-        private void ItemCost_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            int val;
-            if(!int.TryParse(ItemCost.Text,out val))
-            {
-                ItemCost.ToolTip = "Можно вводить только цифры";
-                ItemCost.Foreground = Brushes.DarkRed;
-            }
-            else
-            {
-                ItemCost.ToolTip = "Можно вводить только цифры";
-                ItemCost.Foreground = Brushes.Black;
-
-            }
-        }
+  
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GameClass.Objects;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,29 +17,32 @@ using System.Windows.Shapes;
 namespace GameClientCW.View
 {
     /// <summary>
-    /// Interaction logic for LoadMap.xaml
+    /// Interaction logic for ModView.xaml
     /// </summary>
-    public partial class Add : UserControl
+    public partial class ModView : UserControl
     {
-        public Add()
+        public ModView()
         {
             InitializeComponent();
         }
-        public Button button
+        Mod itm;
+        public Mod Item
         {
             get
             {
-                return ButtonFechar;
+                return itm;
             }
             set
             {
-                ButtonFechar = value;
+                itm = value;
+                 
+                ItemDiscriptution.Text = itm.Discription;
+                ItemName.Text = itm.Name;
+                foreach (Params pr in itm.Parametrs)
+                {
+                    ItemParams.Text += pr.mParam.ToString() + "\t" + pr.value + "\n";
+                }
             }
-        }
-
-        private void ButtonFechar_Click(object sender, RoutedEventArgs e)
-        {
-
         }
     }
 }

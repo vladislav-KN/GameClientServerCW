@@ -1,8 +1,9 @@
-﻿using System;
+﻿using GameClass.Objects;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+ 
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -16,29 +17,30 @@ using System.Windows.Shapes;
 namespace GameClientCW.View
 {
     /// <summary>
-    /// Interaction logic for LoadMap.xaml
+    /// Interaction logic for TaskView.xaml
     /// </summary>
-    public partial class Add : UserControl
+    public partial class TaskView : UserControl
     {
-        public Add()
+        public TaskView()
         {
             InitializeComponent();
         }
-        public Button button
+        UserTask itm;
+        public UserTask Item
         {
             get
             {
-                return ButtonFechar;
+                return itm;
             }
             set
             {
-                ButtonFechar = value;
+                itm = value;
+                Prize.Text = itm.Prize + " $";
+                ItemDiscriptution.Text = itm.Discription;
+                ItemName.Text = itm.Name;
+ 
             }
         }
-
-        private void ButtonFechar_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
+         
     }
 }

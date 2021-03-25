@@ -8,7 +8,7 @@
         xmlns:gif="http://wpfanimatedgif.codeplex.com" 
         
         mc:Ignorable="d"
-        Title="GameClient" MinHeight="370" MinWidth="470">
+        Title="GameClient" MinHeight="370" MinWidth="470" Closing="AuthMain_Closing">
     <Grid Background="#FFDADADA" Margin="0,0,-4,0">
 
         <Border MinWidth="400" MaxWidth="550" CornerRadius="15" Margin="20" Background="White" VerticalAlignment="Center" Padding="40">

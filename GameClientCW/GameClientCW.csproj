@@ -54,15 +54,36 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EPPlus, Version=5.6.1.0, Culture=neutral, PublicKeyToken=ea159fdaa78159a1, processorArchitecture=MSIL">
+      <HintPath>..\packages\EPPlus.5.6.1\lib\net45\EPPlus.dll</HintPath>
+    </Reference>
     <Reference Include="MaterialDesignColors, Version=2.0.0.2422, Culture=neutral, PublicKeyToken=df2a72020bd7962a, processorArchitecture=MSIL">
       <HintPath>..\packages\MaterialDesignColors.2.0.0\lib\net452\MaterialDesignColors.dll</HintPath>
     </Reference>
     <Reference Include="MaterialDesignThemes.Wpf, Version=4.0.0.2422, Culture=neutral, PublicKeyToken=df2a72020bd7962a, processorArchitecture=MSIL">
       <HintPath>..\packages\MaterialDesignThemes.4.0.0\lib\net452\MaterialDesignThemes.Wpf.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.IO.RecyclableMemoryStream, Version=1.4.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.IO.RecyclableMemoryStream.1.4.1\lib\net46\Microsoft.IO.RecyclableMemoryStream.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Annotations, Version=4.2.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.ComponentModel.Annotations.4.7.0\lib\net461\System.ComponentModel.Annotations.dll</HintPath>
+    </Reference>
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.configuration" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.IO.FileSystem.Primitives, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.IO.FileSystem.Primitives.4.0.1\lib\net46\System.IO.FileSystem.Primitives.dll</HintPath>
+      <Private>True</Private>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.IO.Packaging, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.IO.Packaging.4.0.0\lib\net46\System.IO.Packaging.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Security" />
+    <Reference Include="System.Threading.Tasks" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
@@ -105,14 +126,32 @@
     <Compile Include="UserWindow.xaml.cs">
       <DependentUpon>UserWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\AddItemWindow.xaml.cs">
+      <DependentUpon>AddItemWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\AddModToMapWindow.xaml.cs">
       <DependentUpon>AddModToMapWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\AddModWindow.xaml.cs">
+      <DependentUpon>AddModWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\AddParamWindow.xaml.cs">
+      <DependentUpon>AddParamWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\AddTask.xaml.cs">
+      <DependentUpon>AddTask.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\ItemInfo.xaml.cs">
       <DependentUpon>ItemInfo.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\ItemView.xaml.cs">
       <DependentUpon>ItemView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\ModInfo.xaml.cs">
+      <DependentUpon>ModInfo.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\ModView.xaml.cs">
+      <DependentUpon>ModView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\shopItem.xaml.cs">
       <DependentUpon>shopItem.xaml</DependentUpon>
@@ -131,6 +170,12 @@
     </Compile>
     <Compile Include="View\ProfStats.xaml.cs">
       <DependentUpon>ProfStats.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\TaskInfo.xaml.cs">
+      <DependentUpon>TaskInfo.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\TaskView.xaml.cs">
+      <DependentUpon>TaskView.xaml</DependentUpon>
     </Compile>
     <Page Include="AddMapWindow.xaml">
       <SubType>Designer</SubType>
@@ -156,7 +201,23 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="View\AddItemWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\AddModToMapWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\AddModWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\AddParamWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\AddTask.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -165,6 +226,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\ItemView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\ModInfo.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\ModView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -189,6 +258,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\ProfStats.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\TaskInfo.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\TaskView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
